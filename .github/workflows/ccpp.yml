@@ -2,6 +2,7 @@ name: Continuous Integration
 on: [push]
 jobs:
   ubuntu:
+    runs-on: ubuntu-latest
     strategy:
       max-parallel: 2
       matrix:
