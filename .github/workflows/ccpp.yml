@@ -8,9 +8,6 @@ jobs:
       - name: Install (optional) python dependencies
         run: python -m pip install cffi sklearn catboost
   
-      - name: Bootstrap
-        run: bash ./bootstrap.sh
-
       - name: Configure
         run: bash ./configure
 
