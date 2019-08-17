@@ -1,8 +1,8 @@
 name: Continuous Integration
 on: [push]
 jobs:
-  windows:
-    runs-on: windows-latest
+  macOS:
+    runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v1
       - name: Install (optional) python dependencies
