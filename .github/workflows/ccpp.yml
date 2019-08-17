@@ -1,0 +1,30 @@
+name: Continuous Integration
+on: [push]
+jobs:
+  ubuntu:
+    strategy:
+      max-parallel: 2
+      matrix:
+        python-version: [2.7, 3.7]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install (optional) python dependencies
+        run: python -m pip install cffi sklearn catboost
+  
+      - name: Bootstrap
+        run: ./bootstrap.sh
+
+      - name: Configure
+        run: ./configure
+
+      - name: Compile
+        run: make
+
+      - name: Unit Test
+        run: python bindings/python/setup.py test
+
+      - name: Run Example
+        run: python bindings/python/example.py
+
