@@ -18,11 +18,13 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Bootstrap build environment
+        shell: bash
+        run: ./bootstrap.sh
+
+      - name: Setup python
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-        shell: bash
-        run: ./bootstrap.sh
 
       - name: Install python dependencies
         run: |
