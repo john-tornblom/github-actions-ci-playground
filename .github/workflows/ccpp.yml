@@ -12,7 +12,7 @@ jobs:
         run: bash ./configure
 
       - name: Compile
-        run: make
+        run: SHELL=bash make
 
       - name: Unit Test
         run: python bindings/python/setup.py test
