@@ -1,20 +1,41 @@
-name: Build
+name: Build and test
 on: push
 jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [macOS-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
+
+      - name: Install autoreconf on macOS
+        if: matrix.os == 'macOS-latest'
+        run: brew install autoconf
+
       - name: Checkout source code
         uses: actions/checkout@v1
 
-      - name: Configure
+      - name: Bootstrap build environment
+        shell: bash
+        run: ./bootstrap.sh
+
+      - name: Install python dependencies
+        shell: python
+        run: -m pip install cffi sklearn catboost
+
+      - name: Configure source code
         shell: bash
         run: ./configure
 
-      - name: Compile
+      - name: Compile source code
         shell: bash
         run: make
+
+      - name: Run unit tests
+        shell: python
+        run: bindings/python/setup.py test
+
+      - name: Run example
+        shell: python
+        run: bindings/python/example.py
