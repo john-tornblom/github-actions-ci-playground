@@ -9,9 +9,9 @@ jobs:
 
     steps:
 
-      - name: Install autoreconf on macOS
+      - name: Install automake on macOS
         if: matrix.os == 'macOS-latest'
-        run: brew install autoconf
+        run: brew install automake
 
       - name: Checkout source code
         uses: actions/checkout@v1
