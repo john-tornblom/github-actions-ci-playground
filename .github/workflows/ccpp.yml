@@ -1,23 +1,84 @@
 name: Build and test
 on: push
 jobs:
-  msys2-python3:
+  linux-python2:
     strategy:
       matrix:
-        os: [windows-2019]
+        os: [ubuntu-18.04]
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Install MSYS2
-        run: choco install -y msys2 --params "/NoUpdate"
-
-      - name: Install autotools
-        shell: C:\tools\msys64\usr\bin\bash.exe --login {0}
-        run: pacman -S automake autoconf libtool
-
       - name: Checkout source code
         uses: actions/checkout@v1
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get install autoconf libtool build-essential
+          sudo apt-get install python-cffi python-pip python-sklearn
+          python2 -m pip install catboost --user
+
       - name: Build
-        shell: C:\tools\msys64\usr\bin\bash.exe --login {0}
-        run: ./bootstrap.sh
+        run: |
+          ./bootstrap.sh
+          PYTHON=python2 ./configure
+          make
+
+      - name: Test
+        run: |
+          python2 bindings/python/example.py
+          python2 bindings/python/setup.py test
+
+  linux-python3:
+    strategy:
+      matrix:
+        os: [ubuntu-18.04]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v1
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install autoconf libtool build-essential
+          sudo apt-get install python3-cffi python3-pip python3-setuptools python3-sklearn
+          python3 -m pip install catboost --user
+
+      - name: Build
+        run: |
+          ./bootstrap.sh
+          PYTHON=python3 ./configure
+          make
+
+      - name: Test
+        run: |
+          python3 bindings/python/example.py
+          python3 bindings/python/setup.py test
+
+  darwin-python3:
+    strategy:
+      matrix:
+        os: [macOS-10.14]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v1
+
+      - name: Install dependencies
+        run: |
+          brew install automake autoconf libtool
+          python3 -m pip install cffi sklearn catboost
+
+      - name: Build
+        run: |
+          ./bootstrap.sh
+          PYTHON=python3 ./configure
+          make
+
+      - name: Test
+        run: |
+          python3 bindings/python/example.py
+          python3 bindings/python/setup.py test
+
+
