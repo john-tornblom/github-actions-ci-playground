@@ -1,30 +1,20 @@
 name: Build and test
 on: push
 jobs:
-  msys-python3:
+  msys2-python3:
     strategy:
       matrix:
         os: [windows-2019]
     runs-on: ${{ matrix.os }}
 
     steps:
+      - name: Install dependencies
+        run: |
+          choco install -y msys2
+
       - name: Checkout source code
         uses: actions/checkout@v1
 
-      - name: Install dependencies
-        run: |
-          mingw-get install msys-automake msys-autoconf msys-libtool
-          python3 -m pip install cffi sklearn catboost
-
       - name: Build
         shell: bash
-        run: |
-          ./bootstrap.sh
-          PYTHON=python3 ./configure
-          make
-
-      - name: Test
-        run: |
-          python3 bindings/python/example.py
-          python3 bindings/python/setup.py test
-
+        run: ./bootstrap.sh
