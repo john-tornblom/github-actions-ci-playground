@@ -1,46 +1,29 @@
 name: Build and test
 on: push
 jobs:
-  build:
+  ubuntu-python2:
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest]
-        python-version: [2.7, 3.7]
+        os: [ubuntu-18.04]
     runs-on: ${{ matrix.os }}
 
     steps:
-
-      - name: Install autotools on macOS
-        if: matrix.os == 'macOS-latest'
-        run: brew install automake autoconf libtool
-
       - name: Checkout source code
         uses: actions/checkout@v1
 
-      - name: Bootstrap build environment
-        shell: bash
-        run: ./bootstrap.sh
-
-      - name: Setup python
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install python build dependencies
-        run: python -m pip install cffi
-
-      - name: Configure source code
-        shell: bash
-        run: ./configure
-
-      - name: Compile source code
-        shell: bash
-        run: make
-
-      - name: Run tests
-        if: matrix.python-version == '3.7'
+      - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install sklearn catboost
-          python bindings/python/example.py
-          python bindings/python/setup.py test
+          sudo apt-get install autoconf libtool build-essential
+          sudo apt-get install python-cffi python-pip python-sklearn
+          python2 -m pip install catboost --user
+
+      - name: Build
+        run: |
+          ./bootstrap.sh
+          PYTHON=python2 ./configure
+          make
+
+      - name: Test
+        run: |
+          python2 bindings/python/example.py
+          python2 bindings/python/setup.py test
