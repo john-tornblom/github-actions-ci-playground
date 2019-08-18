@@ -8,10 +8,11 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Install dependencies
-        run: |
-          choco install -y msys2
-          pacman -S automake autoconf
+      - name: Install MSYS2
+        run: choco install -y msys2 --params "/NoUpdate"
+
+      - name: Install autotools
+        run: pacman -S automake autoconf libtool
 
       - name: Checkout source code
         uses: actions/checkout@v1
