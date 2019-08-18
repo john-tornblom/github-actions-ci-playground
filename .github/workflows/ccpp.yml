@@ -1,7 +1,7 @@
 name: Build and test
 on: push
 jobs:
-  ubuntu-18.04-py2:
+  ubuntu-py2:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout source code
@@ -25,7 +25,7 @@ jobs:
           python2 bindings/python/setup.py test
 
 
-  ubuntu-18.04-py3:
+  ubuntu-py3:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout source code
@@ -47,4 +47,5 @@ jobs:
         run: |
           python3 bindings/python/example.py
           python3 bindings/python/setup.py test
+
 
