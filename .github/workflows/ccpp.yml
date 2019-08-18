@@ -11,6 +11,7 @@ jobs:
       - name: Install dependencies
         run: |
           choco install -y msys2
+          pacman -S automake autoconf
 
       - name: Checkout source code
         uses: actions/checkout@v1
