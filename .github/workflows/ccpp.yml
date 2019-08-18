@@ -21,8 +21,7 @@ jobs:
         run: ./bootstrap.sh
 
       - name: Install python dependencies
-        shell: python
-        run: -m pip install cffi sklearn catboost
+        run: python -m pip install cffi sklearn catboost
 
       - name: Configure source code
         shell: bash
@@ -33,9 +32,7 @@ jobs:
         run: make
 
       - name: Run unit tests
-        shell: python
-        run: bindings/python/setup.py test
+        run: python bindings/python/setup.py test
 
       - name: Run example
-        shell: python
-        run: bindings/python/example.py
+        run: python bindings/python/example.py
