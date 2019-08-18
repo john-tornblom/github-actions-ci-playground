@@ -1,10 +1,10 @@
 name: Build and test
 on: push
 jobs:
-  ubuntu-python2:
+  linux-python2:
     strategy:
       matrix:
-        os: [ubuntu-18.04]
+        os: [ubuntu-18.04, ubuntu-16.04]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -27,3 +27,32 @@ jobs:
         run: |
           python2 bindings/python/example.py
           python2 bindings/python/setup.py test
+
+
+  linux-python3:
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-16.04]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v1
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install autoconf libtool build-essential
+          sudo apt-get install python3-cffi python3-pip python3-sklearn
+          python3 -m pip install catboost --user
+
+      - name: Build
+        run: |
+          ./bootstrap.sh
+          PYTHON=python3 ./configure
+          make
+
+      - name: Test
+        run: |
+          python3 bindings/python/example.py
+          python3 bindings/python/setup.py test
+
