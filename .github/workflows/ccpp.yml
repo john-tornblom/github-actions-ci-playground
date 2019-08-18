@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: Build
 on: push
 jobs:
   build:
@@ -8,11 +8,13 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - name: Checkout source code
+        uses: actions/checkout@v1
+
       - name: Configure
-      - uses: actions/checkout@v1
+        shell: bash
         run: ./configure
-          shell: bash
 
       - name: Compile
+        shell: bash
         run: make
-          shell: bash
