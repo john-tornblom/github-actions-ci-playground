@@ -12,11 +12,12 @@ jobs:
         run: choco install -y msys2 --params "/NoUpdate"
 
       - name: Install autotools
+        shell: C:\Windows\System32\cmd.exe /A /Q /C C:\tools\msys64\msys2_shell.cmd -msys {0}
         run: pacman -S automake autoconf libtool
 
       - name: Checkout source code
         uses: actions/checkout@v1
 
       - name: Build
-        shell: bash
+        shell: C:\Windows\System32\cmd.exe /A /Q /C C:\tools\msys64\msys2_shell.cmd -msys {0}
         run: ./bootstrap.sh
